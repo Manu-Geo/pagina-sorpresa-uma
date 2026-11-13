@@ -231,7 +231,7 @@ dialog.zoom img { max-width: 92vw; max-height: 86dvh; object-fit: contain; borde
   </button>
   <div class="abre" id="abre"><div>
     <div class="carta">
-      <h3>Uma</h3>
+      <h3>Querida Uma</h3>
       <!-- Reemplazá por el mensaje real de la familia -->
       <p>Hoy cerrás una etapa enorme y estamos acá, aplaudiendo, para decirte que cada esfuerzo valió la pena.</p>
       <p>Gracias por ser como sos. Lo que viene es todo tuyo, y siempre vas a tener a tu familia al lado.</p>
@@ -299,35 +299,43 @@ addEventListener('load', () => setTimeout(() => confetti(innerWidth / 2, innerHe
 $('#inicio').addEventListener('click', e => { if (!e.target.closest('a')) confetti(e.clientX, e.clientY, 70); });
 
 /* ============ CONTENIDO: ÁLBUMES (editá acá) ============ */
-// Atajos para no escribir 72 nombres a mano:
-//   wa(39, 47, 20)  -> fotos/IMG-20261109-WA0039.jpg, ...WA0047.jpg, ...WA0020.jpg
-//                      (solo ponés el número del final del nombre)
-//   vid(71)         -> videos/VID-20261109-WA0071.mp4
+// Atajos para no escribir los nombres a mano (solo ponés el número del final del archivo):
+//   wa(39, 47)  -> fotos/IMG-20261109-WA0039.jpg, ...WA0047.jpg      (primer lote de fotos)
+//   wb(11, 10)  -> fotos/IMG-20261112-WA0011.jpg, ...WA0010.jpg      (segundo lote de fotos)
+//   vid(71)     -> videos/VID-20261109-WA0071.mp4                    (primer lote de videos)
+//   vb(69)      -> videos/VID-20261111-WA0069.mp4                    (segundo lote de videos)
 //   ["fotos/IMG-20261109-WA0039.jpg", "Pie de foto"]  -> foto con texto debajo
+// OJO: hay números repetidos entre lotes (ej. WA0016), pero son archivos distintos: wa(16) y wb(16).
 // El orden de "items" es el orden de las hojas: así intercalás fotos y videos.
 // layout  = "una" (1 foto por hoja), "dos" (2 por hoja) o "cuatro" (4 por hoja, 2x2).
 //           Los videos siempre ocupan una hoja entera.
 // sueltas = fotos polaroid que aparecen sueltas en la página, después de ese capítulo.
 // tapa = color del libro | bg / fg = color de fondo y de texto de la sección
 // anim = a-giro, a-izq, a-zoom, a-der o a-sube | portada (opcional) = foto de la tapa
-const wa = (...ns) => ns.map(n => `fotos/IMG-20261109-WA${String(n).padStart(4, '0')}.jpg`);
+const arch = (pre, ns) => ns.map(n => `fotos/IMG-${pre}-WA${String(n).padStart(4, '0')}.jpg`);
+const wa = (...ns) => arch('20261109', ns);
+const wb = (...ns) => arch('20261112', ns);
 const vid = n => `videos/VID-20261109-WA${String(n).padStart(4, '0')}.mp4`;
+const vb = n => `videos/VID-20261111-WA${String(n).padStart(4, '0')}.mp4`;
 
 const ALBUMES = [
-  { titulo: "Cuando eras chiquita", sub: "Donde empezó todo.", tapa: "#8c3355", bg: "#f7d3da", fg: "#4a1f33", anim: "a-giro", layout: "una",
-    items: [...wa(39, 20, 51, 42), vid(71), ...wa(36, 26, 38, 91), vid(97), ...wa(98, 54, 60)],
-    sueltas: wa(47, 31) },
+  { titulo: "Tus primeros años", sub: "Cuando todo eran mimos, upa y pañales.", tapa: "#4a6fa5", bg: "#e6ecf7", fg: "#1f3350", anim: "a-sube", layout: "una",
+    items: [...wa(39), ...wb(11, 10, 12, 13, 14, 15, 16, 18)],
+    sueltas: wb(21, 22) },
+  { titulo: "Cuando eras chiquita", sub: "Juegos, risas y mucha travesura.", tapa: "#8c3355", bg: "#f7d3da", fg: "#4a1f33", anim: "a-giro", layout: "dos",
+    items: [...wb(17, 19, 20, 23, 24, 33), vid(71), ...wa(20, 51, 42, 36, 26, 38), vid(97), ...wa(91, 98, 54, 60)],
+    sueltas: [...wa(47, 31), ...wb(25)] },
   { titulo: "Cumpleaños y fiestas", sub: "Torta, globos y mucha gente que te quiere.", tapa: "#2f5a63", bg: "#cfe5e3", fg: "#173d44", anim: "a-izq", layout: "cuatro",
-    items: [...wa(22, 52, 17, 48), ...wa(32, 55, 29, 40), vid(68), ...wa(63, 35, 100, 30)],
+    items: [...wa(22, 52, 17, 48), vb(70), ...wa(32, 55, 29, 40), vid(68), ...wa(63, 35, 100, 30)],
     sueltas: wa(37, 95) },
-  { titulo: "Días especiales e inolvidables", sub: "Los días que se guardan para siempre.", tapa: "#6b4fa3", bg: "#2b2447", fg: "#f1eaff", anim: "a-zoom", layout: "dos",
+  { titulo: "Navidades y días especiales", sub: "Los días que se guardan para siempre.", tapa: "#6b4fa3", bg: "#2b2447", fg: "#f1eaff", anim: "a-zoom", layout: "una",
     items: [...wa(44, 45, 66, 18), vid(73), ...wa(58, 19, 57, 59), vid(76), ...wa(46, 56)],
     sueltas: wa(50) },
-  { titulo: "Tiempo con tus padres que tanto te aprecian", sub: "Los días en que todo era aventura.", tapa: "#a8643a", bg: "#fbe3c5", fg: "#4a2b12", anim: "a-der", layout: "una",
-    items: [...wa(90, 87, 94, 93, 89), vid(72), ...wa(92, 96, 43, 53, 27)],
-    sueltas: wa(61, 33, 21) },
-  { titulo: "Creciendo", sub: "Cada año, un poco más vos.", tapa: "#b04a6b", bg: "#1c0c16", fg: "#fbf0ee", anim: "a-sube", layout: "cuatro",
-    items: [...wa(49, 65, 41, 62), vid(77), ...wa(25, 34, 24, 28), vid(82), ...wa(99, 88, 64, 16)],
+  { titulo: "Salidas y vacaciones", sub: "Los días en que todo era aventura.", tapa: "#a8643a", bg: "#fbe3c5", fg: "#4a2b12", anim: "a-der", layout: "dos",
+    items: [...wa(90, 87, 94, 93), vid(72), ...wa(89, 92, 96, 43, 53, 27), ...wb(26, 27, 28, 32, 31)],
+    sueltas: [...wb(29), ...wa(61, 33, 21)] },
+  { titulo: "Creciendo", sub: "Cada año, un poco más vos.", tapa: "#b04a6b", bg: "#1c0c16", fg: "#fbf0ee", anim: "a-giro", layout: "cuatro",
+    items: [...wa(49, 65, 41, 62), vid(77), ...wa(25, 34, 24, 28), vb(69), ...wa(99, 88), vid(82), ...wa(64, 16), vb(71)],
     sueltas: wa(23) }
 ];
 
@@ -467,7 +475,7 @@ function abrir(a, its, album) {
   volcar();
   const fin = document.createElement('div');              // última hoja
   fin.className = 'hoja pagina fin';
-  fin.innerHTML = '<p class="gran">Y todavía quedan muchas páginas por ver y escribir</p><button type="button" data-cerrar>Cerrar libro</button>';
+  fin.innerHTML = '<p class="gran">Y todavía quedan muchas páginas por escribir</p><button type="button" data-cerrar>Cerrar libro</button>';
   hojas.push(fin);
   hojas.forEach((h, i) => { h.style.zIndex = hojas.length - i; libro.appendChild(h); });
   actualizar();
