@@ -301,9 +301,9 @@ $('#inicio').addEventListener('click', e => { if (!e.target.closest('a')) confet
 /* ============ CONTENIDO: ÁLBUMES (editá acá) ============ */
 // Atajos para no escribir los nombres a mano (solo ponés el número del final del archivo):
 //   wa(39, 47)  -> fotos/IMG-20261109-WA0039.jpg, ...WA0047.jpg      (primer lote de fotos)
-//   wb(11, 10)  -> fotos/IMG-20261112-WA0011.jpg, ...WA0010.jpg      (segundo lote de fotos)
+//   wb(11, 10)  -> nuevas fotos/IMG-20261112-WA0011.jpg, ...WA0010.jpg   (segundo lote, carpeta "nuevas fotos")
 //   vid(71)     -> videos/VID-20261109-WA0071.mp4                    (primer lote de videos)
-//   vb(69)      -> videos/VID-20261111-WA0069.mp4                    (segundo lote de videos)
+//   vb(69)      -> nuevos videos/VID-20261111-WA0069.mp4             (segundo lote, carpeta "nuevos videos")
 //   ["fotos/IMG-20261109-WA0039.jpg", "Pie de foto"]  -> foto con texto debajo
 // OJO: hay números repetidos entre lotes (ej. WA0016), pero son archivos distintos: wa(16) y wb(16).
 // El orden de "items" es el orden de las hojas: así intercalás fotos y videos.
@@ -312,11 +312,11 @@ $('#inicio').addEventListener('click', e => { if (!e.target.closest('a')) confet
 // sueltas = fotos polaroid que aparecen sueltas en la página, después de ese capítulo.
 // tapa = color del libro | bg / fg = color de fondo y de texto de la sección
 // anim = a-giro, a-izq, a-zoom, a-der o a-sube | portada (opcional) = foto de la tapa
-const arch = (pre, ns) => ns.map(n => `fotos/IMG-${pre}-WA${String(n).padStart(4, '0')}.jpg`);
-const wa = (...ns) => arch('20261109', ns);
-const wb = (...ns) => arch('20261112', ns);
+const arch = (dir, pre, ns) => ns.map(n => `${dir}/IMG-${pre}-WA${String(n).padStart(4, '0')}.jpg`);
+const wa = (...ns) => arch('fotos', '20261109', ns);
+const wb = (...ns) => arch('nuevas%20fotos', '20261112', ns);      // %20 = el espacio de "nuevas fotos"
 const vid = n => `videos/VID-20261109-WA${String(n).padStart(4, '0')}.mp4`;
-const vb = n => `videos/VID-20261111-WA${String(n).padStart(4, '0')}.mp4`;
+const vb = n => `nuevos%20videos/VID-20261111-WA${String(n).padStart(4, '0')}.mp4`;  // %20 = el espacio de "nuevos videos"
 
 const ALBUMES = [
   { titulo: "Tus primeros años", sub: "Cuando todo eran mimos, upa y pañales.", tapa: "#4a6fa5", bg: "#e6ecf7", fg: "#1f3350", anim: "a-sube", layout: "una",
